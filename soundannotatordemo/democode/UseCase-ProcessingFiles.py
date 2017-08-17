@@ -266,7 +266,7 @@ def run():
                 maxFileSize=args['maxFileSize'],
                 datatype = 'float32',
                 requiredKeys=['pulse','tone','noise','energy'],
-                usewavname=True,
+                usefile_id=True,
                 metadata=args,
             )
 
@@ -280,7 +280,7 @@ def run():
                 maxFileSize=args['maxFileSize'],
                 datatype = 'float32',
                 requiredKeys=['E','f_tract','s_tract'],
-                usewavname=True,
+                usefile_id=True,
                 metadata=args,
             )
         

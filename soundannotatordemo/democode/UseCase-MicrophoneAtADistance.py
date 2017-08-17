@@ -249,7 +249,7 @@ def run(isMicrophone=False):
                     maxFileSize=args['maxFileSize'],
                     datatype = 'float32',
                     requiredKeys=['pulse','tone','noise','energy'],
-                    usewavname=False,
+                    usefile_id=False,
                     metadata=args,
                 )
 
@@ -264,7 +264,7 @@ def run(isMicrophone=False):
                     maxFileSize=args['maxFileSize'],
                     datatype = 'float32',
                     requiredKeys=['E','f_tract','s_tract'],
-                    usewavname=False,
+                    usefile_id=False,
                     metadata=args,
                 )
             '''

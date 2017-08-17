@@ -239,7 +239,7 @@ def run():
                     datatype = 'float32',
                     requiredKeys=['pulse','tone','noise','energy','tsmax','tfmax','tsmin','tfmin'],
                     #requiredKeys=['pulse','tone','noise','energy','E','f_tract','s_tract'],
-                    usewavname=True,
+                    usefile_id=True,
                     metadata=args.metadata,
                 )
                
