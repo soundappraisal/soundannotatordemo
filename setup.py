@@ -24,7 +24,7 @@ if __name__ == "__main__":
         version='1.1',
         url='http://www.soundappraisal.eu',
         description='Package with demo and application code accompanying the libsoundannotator libary for online sound classification ',
-        long_description=read('README'),
+        long_description=read('README.md'),
         author='Ronald van Elburg, Arryon Tijsma',
         author_email='r.a.j.van.elburg@soundappraisal.eu',
         download_url='--tba--',
