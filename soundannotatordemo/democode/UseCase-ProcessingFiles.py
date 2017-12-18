@@ -125,6 +125,7 @@ def run():
         #   startLatency=1.0   : delay first read to allow board to build other processors
         b.startProcessor('S2S_SoundInput', wav.WavProcessor,
             ChunkSize=args['chunksize'],
+            SampleRate=args['inputrate'],
             SoundFiles=soundfiles,
             timestep=0.08,
             metadata=args,
@@ -263,6 +264,7 @@ def run():
                 SubscriptionOrder('S2S_PTNE','S2S_FileWriter-PTNE','noise','noise'),
                 SubscriptionOrder('S2S_PTNE','S2S_FileWriter-PTNE','tone','tone'),
                 outdir=os.path.join(args['outdir'],runtimeMetaData.outputPathModifier+'-'+args['script_started'],'ptne'),
+                SampleRate=1.0/args['ptnblockwidth'],
                 maxFileSize=args['maxFileSize'],
                 datatype = 'float32',
                 requiredKeys=['pulse','tone','noise','energy'],
@@ -273,11 +275,12 @@ def run():
         # Start writing tract features and cochleogram to file
         # ... a second file writer is needed because PTNE publishes at another rate then the preceding processors.
         b.startProcessor("S2S_FileWriter-Tracts", FileOutputProcessor,
-                SubscriptionOrder('S2S_TFProcessor','S2S_FileWriter-Tracts','EdB','EdB'),
+                SubscriptionOrder('S2S_TFProcessor','S2S_FileWriter-Tracts','E','E'),
                 SubscriptionOrder('S2S_StructureExtractor_F','S2S_FileWriter-Tracts','f_tract','f_tract'),
                 SubscriptionOrder('S2S_StructureExtractor_S','S2S_FileWriter-Tracts','s_tract','s_tract'),
                 outdir=os.path.join(args['outdir'],runtimeMetaData.outputPathModifier+'-'+args['script_started'],'tracts'),
                 maxFileSize=args['maxFileSize'],
+                SampleRate=InternalRate2,
                 datatype = 'float32',
                 requiredKeys=['E','f_tract','s_tract'],
                 usefile_id=True,
@@ -352,13 +355,13 @@ if __name__ == '__main__':
     args['samplesperframe']=5
 
     # Parameters PTN-Processor
-    args['ptnsplit']= '[5,20,35,50,65,80,95]'  # string, with list which divides the TF-plane in frequency bands, 
-                                             # the TF-plane outside the first and last sacale is ignored.
-    args['ptnblockwidth']=0.1                # timeinterval over which summing takes place.
-    args['ptnreferencevalue']= None          # ptnreferencevalue will be subtracted before publishing rangecompressed bandmeans of E
+    args['ptnsplit']= '[5,20,35,50,65,80,95]'   # string, with list which divides the TF-plane in frequency bands, 
+                                                # the TF-plane outside the first and last sacale is ignored.
+    args['ptnblockwidth']=0.1                   # timeinterval over which summing takes place. 
+    args['ptnreferencevalue']= None             # ptnreferencevalue will be subtracted before publishing rangecompressed bandmeans of E
 
     # Parameters FileWriter
-    args['maxFileSize']=104857600            # in bytes
+    args['maxFileSize']=104857600               # in bytes
 
 
     # output directory
