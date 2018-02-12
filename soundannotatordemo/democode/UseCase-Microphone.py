@@ -40,7 +40,8 @@ from libsoundannotator.streamboard.continuity                       import Conti
 from libsoundannotator.streamboard.subscription                     import SubscriptionOrder, NetworkSubscriptionOrder
 
 # Streamboard processors
-from libsoundannotator.streamboard.processors.input                 import noise, mic 
+from libsoundannotator.streamboard.processors.input                 import noise
+from libsoundannotator.streamboard.processors.input                 import mic_callback as mic
 from libsoundannotator.cpsp                                         import oafilterbank_numpy as oafilterbank
 from libsoundannotator.cpsp                                         import tfprocessor               
 from libsoundannotator.cpsp                                         import structureProcessor 
@@ -98,7 +99,6 @@ def run():
             Microphone=args['microphone'],
             nChannels = 1,
             metadata=args,
-            
         )
 
     if args['decimation'] > 1:
@@ -305,17 +305,17 @@ if __name__ == '__main__':
         os.mkdir(args['logdir'])
 
 
-    # Set microphone related parameters
+    # Set wavfile related parameters
     args['microphone']='digital'
     args['inputrate']=44100
-    
+
     #metadata passed along with all chunks
     args['script_started']=time.strftime('%Y-%m-%d-%H-%M')
     args['location']='testmicrophone'
 
     # Parameters for Resampler
     args['decimation']=5
-    args['chunksize']=8820
+    args['chunksize']=8192
 
     # Parameters for TF-Processor
     args['noofscales']=100
