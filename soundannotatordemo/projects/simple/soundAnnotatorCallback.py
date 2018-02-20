@@ -239,7 +239,8 @@ def run():
                     datatype = 'float32',
                     requiredKeys=['pulse','tone','noise','energy','tsmax','tfmax','tsmin','tfmin'],
                     #requiredKeys=['pulse','tone','noise','energy','E','f_tract','s_tract'],
-                    usefile_id=True,
+                    usesource_id=True,
+                    source_processor='S2S_SoundInput',
                     metadata=args.metadata,
                 )
                

@@ -89,7 +89,6 @@ def run():
         b.startProcessor('S2S_SoundInput',noise.NoiseChunkGenerator,
             SampleRate=args['inputrate'],
             ChunkSize=ChunkSize,
-            metadata=args,
             noofchunks=1,
             calibration=args['calibrate'],  # Will force noofchunks to 1 and fixes continuity
         )
@@ -128,7 +127,6 @@ def run():
             SampleRate=args['inputrate'],
             SoundFiles=soundfiles,
             timestep=0.08,
-            metadata=args,
             #newFileContinuity=Continuity.discontinuous
         )
     else:
@@ -193,7 +191,7 @@ def run():
         globalOutputPathModifier=runtimeMetaData.outputPathModifier,
         dTypeIn=np.complex64,
         dTypeOut=np.complex64,
-        metadata=args,
+        
     )
 
 
@@ -268,8 +266,9 @@ def run():
                 maxFileSize=args['maxFileSize'],
                 datatype = 'float32',
                 requiredKeys=['pulse','tone','noise','energy'],
-                usefile_id=True,
-                metadata=args,
+                usesource_id=True,
+                source_processor='S2S_SoundInput',
+                
             )
 
         # Start writing tract features and cochleogram to file
@@ -283,9 +282,25 @@ def run():
                 SampleRate=InternalRate2,
                 datatype = 'float32',
                 requiredKeys=['E','f_tract','s_tract'],
-                usefile_id=True,
-                metadata=args,
+                usesource_id=True,
+                source_processor='S2S_SoundInput',
+                
             )
+            
+        # Start writing sound to file
+        # ... a second file writer is needed because PTNE publishes at another rate then the preceding processors.
+        '''b.startProcessor("S2S_FileWriter-Sounds", FileOutputProcessor,
+                #SubscriptionOrder('S2S_Resampler','S2S_FileWriter-Sounds','timeseries','timeseries'),
+                SubscriptionOrder('S2S_SoundInput','S2S_FileWriter-Sounds','sound','sound'),
+                outdir=os.path.join(args['outdir'],runtimeMetaData.outputPathModifier+'-'+args['script_started'],'sounds'),
+                maxFileSize=args['maxFileSize'],
+                SampleRate=InternalRate,
+                datatype = 'float32',
+                requiredKeys=['sound',],
+                usesource_id=True,
+                source_processor='S2S_SoundInput',
+                
+            )'''
         
        
 
@@ -347,7 +362,7 @@ if __name__ == '__main__':
     args['script_started']=time.strftime('%Y-%m-%d-%H-%M')
 
     # Parameters for Resampler
-    args['decimation']=1
+    args['decimation']=5
     args['chunksize']=8820
 
     # Parameters for TF-Processor

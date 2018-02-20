@@ -237,7 +237,8 @@ def run():
                 maxFileSize=args['maxFileSize'],
                 datatype = 'float32',
                 requiredKeys=['pulse','tone','noise','energy'],
-                usefile_id=False,
+                usesource_id=False,
+                source_processor='S2S_SoundInput',
                 metadata=args,
             )
 
@@ -253,7 +254,8 @@ def run():
                 maxFileSize=args['maxFileSize'],
                 datatype = 'float32',
                 requiredKeys=['E','f_tract','s_tract'],
-                usefile_id=False,
+                usesource_id=False,
+                source_processor='S2S_SoundInput',
                 metadata=args,
             )
         '''
