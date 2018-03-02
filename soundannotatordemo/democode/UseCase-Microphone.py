@@ -239,7 +239,7 @@ def run():
                 requiredKeys=['pulse','tone','noise','energy'],
                 usesource_id=False,
                 source_processor='S2S_SoundInput',
-                metadata=args,
+                location='undetermined location',
             )
 
         # Start writing tract features and cochleogram to file
