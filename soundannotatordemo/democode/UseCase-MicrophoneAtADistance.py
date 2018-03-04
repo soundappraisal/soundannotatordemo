@@ -98,6 +98,7 @@ def run(isMicrophone=False):
         b.startProcessor('S2S_SoundInput', mic.MicInputProcessor,
             SampleRate=args['inputrate'],
             ChunkSize=args['chunksize'],
+            Microphone=args['microphone'],
             nChannels = 1,
             source_id=args['location'],
             network = {
@@ -328,6 +329,7 @@ if __name__ == '__main__':
     #metadata passed along with all chunks
     args['script_started']=time.strftime('%Y-%m-%d-%H-%M')
     args['location']='testmicrophone'
+    args['microphone']='default'
 
     # Parameters for Resampler
     args['decimation']=5
