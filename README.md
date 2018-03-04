@@ -13,4 +13,4 @@ The democode provides two use cases: UseCase-ProcessingFiles and UseCase-Microph
 
 In addition the projects folder contains two scripts with which one can achieve similar results as with the UseCase scripts by setting the correct input arguments. The input arguments can be found by passing --help flag when running these scripts.    
 
-We hope to improve the documentation over time, for now we hope you find the softare usefull as is.
+We hope to improve the documentation over time, for now we hope you find the software usefull as is.

@@ -98,7 +98,7 @@ def run():
             ChunkSize=args['chunksize'],
             Microphone=args['microphone'],
             nChannels = 1,
-            metadata=args,
+            source_id='undetermined_recording_location',
         )
 
     if args['decimation'] > 1:
@@ -237,9 +237,9 @@ def run():
                 maxFileSize=args['maxFileSize'],
                 datatype = 'float32',
                 requiredKeys=['pulse','tone','noise','energy'],
-                usesource_id=False,
+                usesource_id=True,
                 source_processor='S2S_SoundInput',
-                location='undetermined location',
+                #location='undetermined location',
             )
 
         # Start writing tract features and cochleogram to file

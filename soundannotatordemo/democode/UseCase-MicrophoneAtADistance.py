@@ -40,7 +40,9 @@ from libsoundannotator.streamboard.continuity                       import Conti
 from libsoundannotator.streamboard.subscription                     import SubscriptionOrder, NetworkSubscriptionOrder
 
 # Streamboard processors
-from libsoundannotator.streamboard.processors.input                 import noise, mic 
+from libsoundannotator.streamboard.processors.input                 import noise
+from libsoundannotator.streamboard.processors.input                 import mic_callback as mic
+
 from libsoundannotator.cpsp                                         import oafilterbank_numpy as oafilterbank
 from libsoundannotator.cpsp                                         import tfprocessor               
 from libsoundannotator.cpsp                                         import structureProcessor 
@@ -83,14 +85,12 @@ def run(isMicrophone=False):
         # Start generating noise
         #   SampleRate ; sampling frequency
         #   ChunkSize: number of samples produced in one iteration, should be large for calibration.
-        #   metadata:   anything the developer deems relevant to propagate  
         #   noofchunks: number of chunks produced before it stops, if set to None it might go on and on
         #   calibration: if set to true settings will be imposed fitting this use case.
         ChunkSize=11*args['inputrate']
         b.startProcessor('S2S_SoundInput',noise.NoiseChunkGenerator,
             SampleRate=args['inputrate'],
             ChunkSize=ChunkSize,
-            metadata=args,
             noofchunks=1,
             calibration=args['calibrate'],  # Will force noofchunks to 1 and fixes continuity
         )
@@ -99,12 +99,13 @@ def run(isMicrophone=False):
             SampleRate=args['inputrate'],
             ChunkSize=args['chunksize'],
             nChannels = 1,
-            metadata=args,
+            source_id=args['location'],
             network = {
                 'senderKey' : 'sound',
                 'interface' :  args['network-connection-ip'],
                 'port' : args['network-connection-port'],
             }
+            
         )
         
         
@@ -163,7 +164,6 @@ def run(isMicrophone=False):
         #   Parameter storage (obsolete but working):
         #       baseOutputDir=args['outdir'] : location where GCFBProcessor parameters will be saved
         #       globalOutputPathModifier : modifies location where GCFBProcessor parameters will be saved based on GIT commit sha
-        #   metadata:   anything the developer deems relevant to propagate      
         b.startProcessor('S2S_TFProcessor', tfprocessor.GCFBProcessor, myTFProcessorSubscriptionOrder,
             SampleRate=InternalRate,
             fmin=40,
@@ -175,7 +175,6 @@ def run(isMicrophone=False):
             globalOutputPathModifier=runtimeMetaData.outputPathModifier,
             dTypeIn=np.complex64,
             dTypeOut=np.complex64,
-            metadata=args,
         )
 
 
@@ -250,9 +249,8 @@ def run(isMicrophone=False):
                     maxFileSize=args['maxFileSize'],
                     datatype = 'float32',
                     requiredKeys=['pulse','tone','noise','energy'],
-                    usesource_id=False,
+                    usesource_id=True,
                     source_processor='S2S_SoundInput',
-                    metadata=args,
                 )
 
             # Start writing tract features and cochleogram to file
@@ -269,7 +267,7 @@ def run(isMicrophone=False):
                     requiredKeys=['E','f_tract','s_tract'],
                     usesource_id=False,
                     source_processor='S2S_SoundInput',
-                    metadata=args,
+                    location='undetermined location',
                 )
             '''
            
@@ -376,6 +374,8 @@ if __name__ == '__main__':
             isMicrophone =False
             args['calibrate']=True
             run(isMicrophone=isMicrophone)
+        else:
+            raise ValueError('When promted for IsMicrophone you have to specify True or False!')
     
     args['calibrate']=False
     run(isMicrophone=isMicrophone)
