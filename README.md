@@ -11,6 +11,4 @@ The scientific underpinning for the main signal processing algorithms can be fou
     
 The democode provides two use cases: UseCase-ProcessingFiles and UseCase-MicrophoneAtADistance. Both scripts start with the code and at the end they contain a block with parameters. We advice to study the block with parameters carefully before using the scripts.
 
-In addition the projects folder contains two scripts with which one can achieve similar results as with the UseCase scripts by setting the correct input arguments. The input arguments can be found by passing --help flag when running these scripts.    
-
 We hope to improve the documentation over time, for now we hope you find the software usefull as is.
